@@ -196,7 +196,7 @@ uint32_t IT8951ESensor::get_buffer_length_() { return this->get_width_internal()
 void IT8951ESensor::get_device_info(IT8951DevInfo *info) {
     this->write_command(IT8951_I80_CMD_GET_DEV_INFO);
     this->read_words(info, sizeof(IT8951DevInfo));
-    ESP_LOGE(TAG, "Height:%d Width:%d LUT: %s, FW: %s, Mem:%x", 
+    ESP_LOGE(TAG, "get_device_info: Height:%d Width:%d LUT: %s, FW: %s, Mem:%x", 
         info->usPanelH, 
         info->usPanelW,
         info->usLUTVersion,
@@ -258,6 +258,7 @@ void IT8951ESensor::setup() {
  */
 void IT8951ESensor::write_buffer_to_display(uint16_t x, uint16_t y, uint16_t w,
                                             uint16_t h, const uint8_t *gram) {
+    ESP_LOGE(TAG, "Write (x=%d, y=%d, w=%d, h=%d).", x, y, w, h);
     if (x > this->get_width_internal() || y > this->get_height_internal()) {
         ESP_LOGE(TAG, "Pos (%d, %d) out of bounds.", x, y);
         return;
@@ -307,6 +308,7 @@ void IT8951ESensor::write_display() {
  * @retval m5epd_err_t
  */
 void IT8951ESensor::clear(bool init) {
+    ESP_LOGE(TAG, "Clear");
     this->enable();
 
     this->set_target_memory_addr(this->device_info_->usImgBufAddrL | (this->device_info_->usImgBufAddrH << 16));
@@ -329,6 +331,7 @@ void IT8951ESensor::clear(bool init) {
 }
 
 void IT8951ESensor::update() {
+    ESP_LOGE(TAG, "Update");
     this->do_update_();
     this->write_display();
 }
